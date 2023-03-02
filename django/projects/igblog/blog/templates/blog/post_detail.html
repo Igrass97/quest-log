@@ -1,0 +1,9 @@
+<h1>Viewing details for post {{post.id}}</h1>
+<p>{{post.post_text}}</p>
+
+<ul>
+    <h2>Comments</h2>
+    {% for comment in post.comment_set.all %}
+        <li>{{ comment.comment_text }}</li>
+    {% endfor %}
+</ul>
