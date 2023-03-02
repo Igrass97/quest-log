@@ -6,8 +6,8 @@ Some of these I already mastered, but I do not have any personal projects to bui
 
 ## In Progress
 
+- [Django](./django/entries/1.md)
 - Python
-- Django
 - SQL (PostgreSQL)
 
 ## Pending or wishing to improve (entries will be added once I remember other ones 😅)
