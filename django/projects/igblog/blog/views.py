@@ -1,35 +1,54 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from django.views import generic
 
 from .models import Post
 
-# /
-def latests_posts(request):
-    latest_post_list = Post.objects.order_by('-pub_date')[:5]
+DETAIL_TEMPLATE = 'blog/post_detail.html'
+INDEX_TEMPLATE = 'blog/index.html'
 
-    context = {
-        'latest_post_list': latest_post_list,
-    }
-    return render(request, 'blog/index.html', context)
+class IndexView(generic.ListView):
+    model = Post
+    template_name = INDEX_TEMPLATE
 
-# /all
-def all_posts(request):
-    all_posts_list = Post.objects.order_by('-pub_date')
+    def get_queryset(self):
+        return Post.objects.order_by('-pub_date')[:5]
 
-    context = {
-        'all_posts_list': all_posts_list,
-    }
-    return render(request, 'blog/all_posts.html', context)
+# /:pk/detail
+class DetailView(generic.DetailView):
+    model = Post
+    template_name = DETAIL_TEMPLATE
 
-# /:id/post_detail
-def post_detail(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    return render(request, 'blog/post_detail.html', {"post": post})
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        context['like_count'] = context['post'].like_set.count()
+        return context
 
-# /:id/comment
-def comment(request, post_id):
-    return HttpResponse("You're commenting in the post %s." % post_id)
+# /:pk/comment
+def comment(request, pk):
+    try:
+        post = get_object_or_404(Post, pk=pk)
+        comment_text = request.POST['comment_text']
+        if not comment_text:
+            return render(request, DETAIL_TEMPLATE, {"post": post, "error": "Comment cannot be empty"})
+    except (Post.DoesNotExist):
+        return HttpResponse("Post does not exist")
+    except (KeyError):
+        return render(request, DETAIL_TEMPLATE, {"post": post, "error": "Comment cannot be empty"})
+    else:
+        post.comment_set.create(comment_text=request.POST['comment_text'])
+        post.save()
+        return HttpResponseRedirect(reverse('blog:post_detail', args=[pk]))
 
-# /:id/like
-def like(request, post_id):
-    return HttpResponse("You're liking the post %s." % post_id)
+# /:pk/like
+def like(request, pk):
+    try:
+        post = get_object_or_404(Post, pk=pk)
+    except (Post.DoesNotExist):
+        return HttpResponse("Post does not exist")
+    else:
+        post.like_set.create()
+        post.save()
+        return HttpResponseRedirect(reverse('blog:post_detail', args=[pk]))
+

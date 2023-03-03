@@ -1,9 +1,22 @@
 <h1>Viewing details for post {{post.id}}</h1>
 <p>{{post.post_text}}</p>
-
+<p>Likes: {{like_count}}</p>
 <ul>
     <h2>Comments</h2>
     {% for comment in post.comment_set.all %}
         <li>{{ comment.comment_text }}</li>
     {% endfor %}
+
+    {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
 </ul>
+
+<form action="{% url 'blog:comment' post.id %}" method="post">
+    {% csrf_token %}
+    <textarea style="margin-top: 1rem;" name="comment_text" cols="40" rows="5"></textarea>
+    <input style="display:block;" type="submit" value="Comment">
+</form>
+
+<form action="{% url 'blog:like' post.id %}" method="post">
+    {% csrf_token %}
+    <input style="display:block;" type="submit" value="Like">
+</form>

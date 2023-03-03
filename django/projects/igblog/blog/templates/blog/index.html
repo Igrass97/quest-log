@@ -1,8 +1,8 @@
 <!-- To make the tutorial shorter, all template examples use incomplete HTML. In your own projects you should use complete HTML documents. -->
-<h1>Latest Posts</h1>
+<h1>All Posts</h1>
 
-{% if latest_post_list %}
-    {% for post in latest_post_list %}
+{% if post_list %}
+    {% for post in post_list %}
         <div style="border: 1px solid black; padding: 1rem; display: inline-block; min-width: 300px;">
             <a href="{% url 'blog:post_detail' post.id %}">Post Link</a>
             <p>{{post.post_text}}</p>
