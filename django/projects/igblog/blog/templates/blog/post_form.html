@@ -1,0 +1,6 @@
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save">
+</form>
+
+<a style="display: block; margin-top: 3rem;" href="{% url 'blog:all_posts' %}">Back to List</a>

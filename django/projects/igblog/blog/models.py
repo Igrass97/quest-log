@@ -11,7 +11,7 @@ class Post(models.Model):
         return str(self.pub_date)
 
     def was_published_recently(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+        return self.pub_date >= timezone.now() - datetime.timedelta(days=1) and self.pub_date <= timezone.now()
 
 class Comment(models.Model):
     comment_text = models.CharField(max_length=100)
