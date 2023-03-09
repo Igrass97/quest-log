@@ -6,7 +6,9 @@ Some of these I already mastered, but I do not have any personal projects to bui
 
 ## In Progress
 
-- [Django](./django/entries/1.md)
+- Django
+  - [Entries](./django/entries/1.md)
+  - [Cheatsheet](./django/entries/cheatsheet.md)
 - Python
 - SQL (PostgreSQL)
 

@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 
 class Post(models.Model):
+    post_title = models.CharField(max_length=100, default='Untitled')
     post_text = models.CharField(max_length=1000)
     pub_date = models.DateTimeField('date published')
 

@@ -1,10 +1,13 @@
-<h1>Viewing details for post {{post.id}}</h1>
-<p>{{post.post_text}}</p>
-<p>Likes: {{like_count}}</p>
-<ul>
-    <h2>Comments</h2>
+{% load static %}
+<link rel="stylesheet" href="{% static 'blog/style.css' %}">
+
+<h1>{{post.post_title}}</h1>
+<p style="margin: 1rem 0;">{{post.post_text}}</p>
+<p style="margin-bottom: 3rem;">Likes: {{like_count}}</p>
+<ul class="comments">
+    <h2 class="comments__title">Comments</h2>
     {% for comment in post.comment_set.all %}
-        <li>{{ comment.comment_text }}</li>
+        <li class="comments__text">{{ comment.comment_text }}</li>
     {% endfor %}
 
     {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
@@ -13,12 +16,12 @@
 <form action="{% url 'blog:comment' post.id %}" method="post">
     {% csrf_token %}
     <textarea style="margin-top: 1rem;" name="comment_text" cols="40" rows="5"></textarea>
-    <input style="display:block;" type="submit" value="Comment">
+    <input class="link" style="display:block;" type="submit" value="Comment">
 </form>
 
 <form action="{% url 'blog:like' post.id %}" method="post">
     {% csrf_token %}
-    <input style="display:block;" type="submit" value="Like">
+    <input class="link" style="display:block;" type="submit" value="Like">
 </form>
 
 <a style="display: block; margin-top: 3rem;" href="{% url 'blog:all_posts' %}">Back to List</a>

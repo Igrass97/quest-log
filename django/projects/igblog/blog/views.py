@@ -66,9 +66,18 @@ def like(request, pk):
         post.save()
         return HttpResponseRedirect(reverse('blog:post_detail', args=[pk]))
 
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['post_title', 'post_text']
+
+    post_title = forms.CharField(max_length=100)
+    post_text = forms.CharField(max_length=1000, widget=forms.Textarea)
+
 class PostCreateView(CreateView):
     model = Post
-    fields = ['post_text']
+    # fields = ['post_title', 'post_text']
+    form_class = PostForm
     template_name = 'blog/post_form.html'
     success_url = reverse_lazy('blog:all_posts')
 
